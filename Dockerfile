@@ -1,9 +1,15 @@
-FROM n8nio/n8n:latest
+FROM node:18
 
-USER root
+# Set working directory
+WORKDIR /usr/src/app
 
-# Install git & bash (dibutuhkan untuk install dari GitHub/npm)
-RUN apk add --no-cache git bash \
- && npm install -g n8n-nodes-tesseractjs
+# Install git, tesseract, dan tools lain (jaga-jaga)
+RUN apt-get update && \
+    apt-get install -y git tesseract-ocr && \
+    npm install -g n8n n8n-nodes-tesseractjs
 
-USER node
+# Expose port
+EXPOSE 5678
+
+# Start n8n
+CMD ["n8n"]
